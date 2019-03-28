@@ -1,8 +1,6 @@
 import numpy as np
 import cv2
 
-point = []
-px = []
 
 def fusion_img2mask(mask):
 	
@@ -47,33 +45,47 @@ def select_same_color_2(pixel):
 	mask[:,:,2] = 255
 	mask = mask.astype(np.uint8)
 	cv2.imshow('mask', mask)
-	fusion_img2mask(mask)
+	#fusion_img2mask(mask)
 
     
 
 
 def get_mouse_clicks(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
-        print "Point clicked: ".format(x, y)
-        point = [x,y]
-        px = img[point[1], point[0]]
-        print px
-        select_same_color_2(px)
-        
+        print "Point clicked: {}, {}".format(x, y)
+        #px = img[y, x]
+        #print (px)
 
-cap = cv2.VideoCapture('video.avi')
+"""
+while True:
+	videoOrPhoto = input("1 for Video 2 for Image: ")
+	if videoOrPhoto == 1:
+		break
+	elif videoOrPhoto == 2:
+		break	
+
+while True:
+	colorOrGray = input("1 for Color 2 for Grayscaled: ")
+	if colorOrGray == 1:
+		break
+	elif colorOrGray == 2:
+		break	
+
+if videoOrPhoto == 1:
+"""
+cap = cv2.VideoCapture('bird.avi')
 
 while(cap.isOpened()):
+	
 	ret, img = cap.read()
-
-	cv2.imshow('frame',img)	
-	cv2.setMouseCallback("frame", get_mouse_clicks)
-
-			
-	if cv2.waitKey(1) & 0xFF == ord('q'):
+	if ret:
+		cv2.imshow('frame', img)
+		cv2.setMouseCallback("frame", get_mouse_clicks)	
+	else:
 	    break
 
-
+	if cv2.waitKey(1) & 0xFF == ord('q'):
+	    break
 cap.release()
 cv2.destroyAllWindows()
 

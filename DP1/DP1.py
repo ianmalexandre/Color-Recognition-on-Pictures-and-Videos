@@ -2,7 +2,6 @@ import numpy as np
 from scipy.spatial import distance
 import cv2 
 
-point = []
 
 
 def fusion_img2mask(mask):
@@ -34,40 +33,39 @@ def fusion_img2mask(mask):
 
 
 def select_same_color_2(pixel):
-    width, height, depth = img.shape
+
+    width, height, depth = img.shape    
     maskPixel = np.zeros(((width, height, depth)))
     maskPixel[:,:] = pixel
+
     #b = (img[:,:,0] - mask1[:,:,0])
     #g = (img[:,:,1] - mask1[:,:,1])
     #r = (img[:,:,2] - mask1[:,:,2])
     res = np.sqrt(((img[:,:,0] - maskPixel[:,:,0])**2)+((img[:,:,1] - maskPixel[:,:,1])**2)+((img[:,:,2] - maskPixel[:,:,2])**2))
+
     res = np.where(res < 13, 0, 255)
     mask = np.zeros(((width, height,3))) 
     mask[:,:,0] = res
     mask[:,:,1] = res
     mask[:,:,2] = 255
     mask = mask.astype(np.uint8)
-    cv2.imshow('mask', mask)
     fusion_img2mask(mask)
 
 
 def get_mouse_clicks(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
         print ("Point clicked: {}, {}".format(x, y))
-        point = [x,y]
-        px = img[point[1], point[0]]
+        px = img[y, x]
         print (px)
         select_same_color_2(px)
 
 
-img = cv2.imread('lena.jpg', cv2.IMREAD_COLOR)
+img = cv2.imread('rainbow.jpg', cv2.IMREAD_COLOR)
 #img = cv2.imread('rainbow.jpg',cv2.IMREAD_GRAYSCALE)
 
 cv2.imshow('image',img)
-
 #Reference: https://docs.opencv.org/2.4/modules/highgui/doc/user_interface.html?highlight=setmousecallback
+
 cv2.setMouseCallback("image", get_mouse_clicks)
-
-
 cv2.waitKey(0)
 cv2.destroyAllWindows()
