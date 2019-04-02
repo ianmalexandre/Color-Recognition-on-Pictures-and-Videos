@@ -61,7 +61,6 @@ def select_same_color_2(pixel):
 	width, height, depth = img.shape
 	maskPixel = np.zeros(((width, height, depth)))
 	maskPixel[:,:] = pixel
-	cv2.imshow('maskPixel', maskPixel)
 	#b = (img[:,:,0] - mask1[:,:,0])
 	#g = (img[:,:,1] - mask1[:,:,1])
 	#r = (img[:,:,2] - mask1[:,:,2])
@@ -78,14 +77,17 @@ def get_mouse_clicks(event, x, y, flags, params):
 	if event == cv2.EVENT_LBUTTONDOWN:
 		print "Point clicked: {}, {}".format(x, y)
 		px = img[y, x]
-		print (px)
 		if videoOrPhoto == 2:
 			if RGBorGrey == 1:
 				select_same_color_2(px)
+				print "B = {}, G = {}, R = {}". format(px[0], px[1], px[2])
 			else:
-				select_same_color_1(px)	
+				select_same_color_1(px)
+				print "L = ", px	
 
 if __name__ == '__main__':
+
+	name = raw_input("Name of your file: ")
 
 	while True:
 		videoOrPhoto = input("1 for Video 2 for Image: ")
@@ -94,13 +96,11 @@ if __name__ == '__main__':
 		elif videoOrPhoto == 2:
 			break	
 
-
-
 	if videoOrPhoto == 1:
 		while True:
 			cameraOrVideo = input("1 for Video 2 for Camera: ")
 			if cameraOrVideo == 1:
-				cap = cv2.VideoCapture('output.avi')
+				cap = cv2.VideoCapture('videos/' + name)
 				break
 			elif cameraOrVideo == 2:
 				cap = cv2.VideoCapture(0)
@@ -130,10 +130,10 @@ if __name__ == '__main__':
 		while True:
 			RGBorGrey = input("1 for RGB 2 for Greyscaled: ")
 			if RGBorGrey == 1:
-				img = cv2.imread('rainbow.jpg', 1)
+				img = cv2.imread('images/' + name, 1)
 				break
 			elif RGBorGrey == 2:
-				img = cv2.imread('grey.jpeg', 0)
+				img = cv2.imread('images/' + name, 0)
 				break	
 	
 		cv2.namedWindow("image")
